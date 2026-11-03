@@ -1,0 +1,36 @@
+
+### File: `csv2json.py`
+
+```python
+#!/usr/bin/env python3
+"""Convert CSV files to JSON."""
+
+import argparse
+import csv
+import json
+import sys
+
+
+def convert(input_path: str, output_path: str | None = None) -> None:
+    with open(input_path, newline="", encoding="utf-8") as csv_file:
+        reader = csv.DictReader(csv_file)
+        data = list(reader)
+
+    if output_path:
+        with open(output_path, "w", encoding="utf-8") as json_file:
+            json.dump(data, json_file, indent=2, ensure_ascii=False)
+    else:
+        json.dump(data, sys.stdout, indent=2, ensure_ascii=False)
+        print()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Convert CSV to JSON")
+    parser.add_argument("input", help="Path to the input CSV file")
+    parser.add_argument("-o", "--output", help="Path to the output JSON file")
+    args = parser.parse_args()
+    convert(args.input, args.output)
+
+
+if __name__ == "__main__":
+    main()
